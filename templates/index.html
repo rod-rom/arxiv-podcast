@@ -1,0 +1,35 @@
+{% extends 'base.html'%}
+
+{% block head%}
+<h1>ArXiv Podcast</h1>
+{% endblock %}
+
+{% block body %}
+<body>
+  <form method="get">
+    <select onchange=val() name="category" title="Search in" id="search-category">
+      <option value="cs">Computer Science</option>
+      <option value="econ">Economics</option>
+      <option value="eess">Electrical Engineering and Systems Science</option>
+      <option value="math">Mathematics</option>
+      <option value="physics">Physics</option>
+      <option value="q-bio">Quantitative Biology</option>
+      <option value="q-fin">Quantitative Finance</option>
+      <option value="stat">Statistics</option>
+    </select>
+  </form>
+  <form action="/search" method="post">
+    <label for="search">Searching in archive <strong id="category-binding"></strong>:</label>
+    <input type="text" name="search" placeholder="Search for a paper">
+    <input type="submit" name="submit" value="Search">
+  </form>
+</body>
+<script>
+  var selectTag = document.getElementById("search-category");
+  var pTag = document.getElementById("category-binding");
+  pTag.innerText = selectTag.value;
+  function val() {
+    pTag.innerText = selectTag.value;
+  }
+</script>
+{% endblock %}

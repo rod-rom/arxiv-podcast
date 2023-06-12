@@ -1,0 +1,43 @@
+{% extends 'base.html'%}
+
+{% block head%}
+<h1>Search results</h1>
+{% endblock %}
+
+    {% block body %}
+<body>
+    <h2>Query: {{ query }}</h2>
+
+    <h3>Results:</h3>
+    {% for entry in results.entries %}
+        <div class="entry">
+            <h4>E-print Metadata</h4>
+            <p>arxiv-id: {{ entry.id.split('/abs/')[-1] }}</p>
+            <p>Published: {{ entry.published }}</p>
+            <p>Title: {{ entry.title }}</p>
+            <p>Last Author: {{ entry.author }} {% if entry.arxiv_affiliation %} ({{ entry.arxiv_affiliation }}) {% endif %}</p>
+
+            {% if entry.authors %}
+                <p>Authors: {% for author in entry.authors %}{{ author.name }}{% if not loop.last %}, {% endif %}{% endfor %}</p>
+            {% endif %}
+
+            {% for link in entry.links %}
+                {% if link.rel == 'alternate' %}
+                    <p>abs page link: {{ link.href }}</p>
+                {% elif link.title == 'pdf' %}
+                    <p>pdf link: {{ link.href }}</p>
+                {% endif %}
+            {% endfor %}
+
+            <p>Journal reference: {% if entry.arxiv_journal_ref %}{{ entry.arxiv_journal_ref }}{% else %}No journal ref found{% endif %}</p>
+            <p>Comments: {% if entry.arxiv_comment %}{{ entry.arxiv_comment }}{% else %}No comment found{% endif %}</p>
+            <p>Primary Category: {{ entry.tags[0]['term'] }}</p>
+
+            <p>All Categories: {% for tag in entry.tags %}{{ tag['term'] }}{% if not loop.last %}, {% endif %}{% endfor %}</p>
+
+            <p>Abstract: {{ entry.summary }}</p>
+        </div>
+        <hr>
+    {% endfor %}
+</body>
+{% endblock %}
